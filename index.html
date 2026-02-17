@@ -717,6 +717,13 @@
                     ["層雲", "そううん", "stratus", "слоест облак"],
                     ["巻雲", "けんうん", "cirrus", "перест облак"],
                     ["入道雲", "にゅうどうぐも", "cumulonimbus", "купесто-дъждовен облак"],
+                    ["積乱雲", "せきらんうん", "cumulonimbus (technical)", "купесто-дъждовен облак"],
+                    ["巻積雲", "けんせきうん", "cirrocumulus", "пересто-купест облак"],
+                    ["巻層雲", "けんそううん", "cirrostratus", "пересто-слоест облак"],
+                    ["高積雲", "こうせきうん", "altocumulus", "средно-купест облак"],
+                    ["高層雲", "こうそううん", "altostratus", "средно-слоест облак"],
+                    ["層積雲", "そうせきうん", "stratocumulus", "слоесто-купест облак"],
+                    ["乱層雲", "らんそううん", "nimbostratus", "дъждовен слоест облак"],
                     ["降水量", "こうすいりょう", "precipitation", "валежи"],
                     ["積雪", "せきせつ", "snow accumulation", "натрупан сняг"],
                     ["視界", "しかい", "visibility", "видимост"],
@@ -1343,7 +1350,11 @@
             // Show/hide clear button
             clearBtn.classList.toggle('visible', trimmedQuery.length > 0);
             
-            if (trimmedQuery.length < 2) {
+            // Require 1 char for Japanese/Cyrillic, 2 for Latin
+            const isNonLatin = /[^\u0000-\u007F]/.test(trimmedQuery);
+            const minLength = isNonLatin ? 1 : 2;
+            
+            if (trimmedQuery.length < minLength) {
                 searchResults.style.display = 'none';
                 tabsContainer.style.display = 'block';
                 return;
