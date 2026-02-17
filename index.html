@@ -380,11 +380,129 @@
             display: table-cell;
         }
 
+        body.show-bulgarian .bg-column {
+            display: table-cell;
+        }
+
         /* No results */
         .no-results {
             text-align: center;
             padding: 40px;
             color: #666;
+        }
+
+        /* Global Search */
+        .global-search {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .global-search-input {
+            width: 100%;
+            padding: 14px 50px 14px 18px;
+            font-size: 1.05rem;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            display: none;
+        }
+
+        .clear-search:hover {
+            color: #ff9f43;
+        }
+
+        .clear-search.visible {
+            display: block;
+        }
+
+        /* Search Results */
+        .search-results {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-results-header span {
+            color: #ff9f43;
+            font-weight: 600;
+        }
+
+        .back-to-topics {
+            background: rgba(255, 159, 67, 0.15);
+            border: 1px solid rgba(255, 159, 67, 0.3);
+            color: #ff9f43;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-to-topics:hover {
+            background: rgba(255, 159, 67, 0.25);
+        }
+
+        .search-results-table-wrapper {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .search-results-table-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .search-results-table-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .search-results-table-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 159, 67, 0.3);
+            border-radius: 4px;
+        }
+
+        .topic-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 159, 67, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #ff9f43;
+            white-space: nowrap;
+        }
+
+        .topic-badge .topic-icon {
+            font-size: 1rem;
+        }
+
+        .highlight {
+            background: rgba(255, 159, 67, 0.3);
+            border-radius: 2px;
+            padding: 0 2px;
         }
     </style>
 </head>
@@ -406,7 +524,35 @@
             </button>
         </div>
 
-        <div class="tabs-container">
+        <div class="global-search">
+            <input type="text" class="search-input global-search-input" id="globalSearch"
+                   placeholder="🔍 Search all topics (kanji, hiragana, English, or Bulgarian)..."
+                   oninput="globalSearch(this.value)">
+            <button class="clear-search" id="clearSearch" onclick="clearGlobalSearch()">✕</button>
+        </div>
+
+        <div class="search-results" id="searchResults" style="display: none;">
+            <div class="search-results-header">
+                <span id="searchResultsCount"></span>
+                <button class="back-to-topics" onclick="clearGlobalSearch()">← Back to topics</button>
+            </div>
+            <div class="search-results-table-wrapper">
+                <table class="glossary-table" id="searchResultsTable">
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>漢字</th>
+                            <th>ひらがな</th>
+                            <th>English</th>
+                            <th class="bg-column">Български</th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchResultsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tabs-container" id="tabsContainer">
             <div class="tabs-header" id="tabsHeader"></div>
             <div id="tabsContent"></div>
         </div>
@@ -1061,6 +1207,7 @@
             btn.classList.toggle('active', showBulgarian);
             indicator.textContent = showBulgarian ? 'ON' : 'OFF';
             container.classList.toggle('show-bulgarian', showBulgarian);
+            document.body.classList.toggle('show-bulgarian', showBulgarian);
             
             // Save preference
             localStorage.setItem('showBulgarian', showBulgarian);
@@ -1079,6 +1226,17 @@
             // Activate first tab
             const firstTab = Object.keys(glossaryData)[0];
             activateTab(firstTab);
+            
+            // Focus search on Cmd/Ctrl+K
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('globalSearch').focus();
+                }
+                if (e.key === 'Escape') {
+                    clearGlobalSearch();
+                }
+            });
         }
 
         function renderTabs() {
@@ -1183,7 +1341,7 @@
             rows.forEach(row => tbody.appendChild(row));
         }
 
-        // Filtering
+        // Filtering (per-topic)
         function filterTable(tabKey, query) {
             const table = document.getElementById(`table-${tabKey}`);
             const rows = table.querySelectorAll('tbody tr');
@@ -1206,6 +1364,95 @@
             });
             
             noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Global Search
+        function globalSearch(query) {
+            const trimmedQuery = query.trim();
+            const lowerQuery = trimmedQuery.toLowerCase();
+            const searchResults = document.getElementById('searchResults');
+            const tabsContainer = document.getElementById('tabsContainer');
+            const clearBtn = document.getElementById('clearSearch');
+            const resultsBody = document.getElementById('searchResultsBody');
+            const resultsCount = document.getElementById('searchResultsCount');
+            
+            // Show/hide clear button
+            clearBtn.classList.toggle('visible', trimmedQuery.length > 0);
+            
+            if (trimmedQuery.length < 2) {
+                searchResults.style.display = 'none';
+                tabsContainer.style.display = 'block';
+                return;
+            }
+            
+            // Search all topics
+            const results = [];
+            Object.entries(glossaryData).forEach(([key, topic]) => {
+                topic.words.forEach(([kanji, hiragana, english, bulgarian]) => {
+                    const bulgarianLower = (bulgarian || '').toLowerCase();
+                    if (kanji.includes(trimmedQuery) || 
+                        hiragana.includes(trimmedQuery) || 
+                        english.toLowerCase().includes(lowerQuery) ||
+                        bulgarianLower.includes(lowerQuery)) {
+                        results.push({
+                            topicKey: key,
+                            topicIcon: topic.icon,
+                            topicName: topic.name,
+                            kanji, hiragana, english, bulgarian
+                        });
+                    }
+                });
+            });
+            
+            // Display results
+            searchResults.style.display = 'block';
+            tabsContainer.style.display = 'none';
+            
+            resultsCount.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} found`;
+            
+            if (results.length === 0) {
+                resultsBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
+                            No matching words found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Highlight matching text
+            function highlight(text, query) {
+                if (!text) return '';
+                const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                return text.replace(regex, '<span class="highlight">$1</span>');
+            }
+            
+            resultsBody.innerHTML = results.map(r => `
+                <tr>
+                    <td>
+                        <span class="topic-badge">
+                            <span class="topic-icon">${r.topicIcon}</span>
+                            <span>${r.topicName}</span>
+                        </span>
+                    </td>
+                    <td class="kanji">
+                        <a href="https://jisho.org/search/${encodeURIComponent(r.kanji)}" target="_blank" title="Look up on Jisho.org">
+                            ${highlight(r.kanji, trimmedQuery)}
+                        </a>
+                    </td>
+                    <td class="hiragana">${highlight(r.hiragana, trimmedQuery)}</td>
+                    <td class="english">${highlight(r.english, trimmedQuery)}</td>
+                    <td class="bg-column bulgarian">${highlight(r.bulgarian || '', trimmedQuery)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearGlobalSearch() {
+            const searchInput = document.getElementById('globalSearch');
+            searchInput.value = '';
+            globalSearch('');
+            searchInput.focus();
         }
 
         // Initialize on load
