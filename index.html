@@ -143,10 +143,6 @@
         }
 
         /* Search */
-        .search-box {
-            margin-bottom: 20px;
-        }
-
         .search-input {
             width: 100%;
             padding: 12px 16px;
@@ -1259,12 +1255,6 @@
                         <h2 class="tab-title">${topic.icon} ${topic.name}</h2>
                         <p class="tab-subtitle">${topic.nameJp} • ${topic.words.length} words</p>
                         
-                        <div class="search-box">
-                            <input type="text" class="search-input" 
-                                   placeholder="🔍 Search (kanji, hiragana, or English)..."
-                                   onkeyup="filterTable('${key}', this.value)">
-                        </div>
-                        
                         <table class="glossary-table" id="table-${key}">
                             <thead>
                                 <tr>
@@ -1285,7 +1275,6 @@
                                 `).join('')}
                             </tbody>
                         </table>
-                        <div class="no-results" style="display: none;">No matching words found</div>
                     </div>
                 `;
             });
@@ -1339,31 +1328,6 @@
             
             // Re-append rows
             rows.forEach(row => tbody.appendChild(row));
-        }
-
-        // Filtering (per-topic)
-        function filterTable(tabKey, query) {
-            const table = document.getElementById(`table-${tabKey}`);
-            const rows = table.querySelectorAll('tbody tr');
-            const noResults = document.querySelector(`#tab-${tabKey} .no-results`);
-            const lowerQuery = query.toLowerCase().trim();
-            
-            let visibleCount = 0;
-            
-            rows.forEach(row => {
-                const kanji = row.cells[0].textContent;
-                const hiragana = row.cells[1].textContent;
-                const english = row.cells[2].textContent.toLowerCase();
-                
-                const matches = kanji.includes(query) || 
-                               hiragana.includes(query) || 
-                               english.includes(lowerQuery);
-                
-                row.classList.toggle('hidden', !matches);
-                if (matches) visibleCount++;
-            });
-            
-            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
         }
 
         // Global Search
