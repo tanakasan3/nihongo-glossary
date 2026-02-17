@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語用語集 | Nihongo Glossary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .word-count {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tabs-header {
+            display: flex;
+            overflow-x: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs-header::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tabs-header::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tabs-header::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .tab-btn {
+            padding: 14px 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: #00d9ff;
+            border-bottom-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .tab-icon {
+            font-size: 1.1rem;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-title {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .tab-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        /* Search */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input::placeholder {
+            color: #666;
+        }
+
+        .search-input:focus {
+            border-color: rgba(0, 217, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
+        }
+
+        /* Table */
+        .glossary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .glossary-table th {
+            background: rgba(0, 217, 255, 0.1);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #00d9ff;
+            cursor: pointer;
+            user-select: none;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.3);
+            transition: background 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .glossary-table th:hover {
+            background: rgba(0, 217, 255, 0.2);
+        }
+
+        .glossary-table th .sort-icon {
+            margin-left: 6px;
+            opacity: 0.5;
+            font-size: 0.8rem;
+        }
+
+        .glossary-table th.sort-asc .sort-icon,
+        .glossary-table th.sort-desc .sort-icon {
+            opacity: 1;
+        }
+
+        .glossary-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+
+        .glossary-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .glossary-table tr.hidden {
+            display: none;
+        }
+
+        .kanji {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .hiragana {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        .english {
+            color: #ccc;
+        }
+
+        .dict-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 217, 255, 0.1);
+            border-radius: 8px;
+            color: #00d9ff;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .dict-link:hover {
+            background: rgba(0, 217, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Section dividers */
+        .section-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d9ff;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #444;
+            font-size: 0.85rem;
+        }
+        
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .tab-btn {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+
+            .glossary-table th,
+            .glossary-table td {
+                padding: 10px 12px;
+            }
+
+            .kanji {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Quick links */
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 14px;
+            color: #00d9ff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover {
+            background: rgba(0, 217, 255, 0.15);
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇯🇵 日本語用語集</h1>
+            <p class="subtitle">Nihongo Glossary - Japanese Terminology</p>
+            <p class="word-count" id="totalCount">Loading...</p>
+        </header>
+
+        <div class="quick-links">
+            <a href="https://jisho.org" target="_blank" class="quick-link">📖 Jisho.org</a>
+            <a href="https://www.tanoshiijapanese.com/dictionary/" target="_blank" class="quick-link">📚 Tanoshii</a>
+            <a href="https://japandict.com/" target="_blank" class="quick-link">🔍 JapanDict</a>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tabs-header" id="tabsHeader"></div>
+            <div id="tabsContent"></div>
+        </div>
+
+        <footer>
+            <p>Click column headers to sort • Dictionary links go to <a href="https://jisho.org" target="_blank">Jisho.org</a></p>
+            <p style="margin-top: 10px;">⚡ Built by SierraVictor</p>
+        </footer>
+    </div>
+
+    <script>
+        // Glossary data organized by topic
+        const glossaryData = {
+            paragliding: {
+                icon: "🪂",
+                name: "Paragliding",
+                nameJp: "パラグライダー用語",
+                words: [
+                    ["離陸", "りりく", "takeoff"],
+                    ["着陸", "ちゃくりく", "landing"],
+                    ["滑空", "かっくう", "gliding"],
+                    ["上昇気流", "じょうしょうきりゅう", "thermal / rising air current"],
+                    ["風向", "ふうこう", "wind direction"],
+                    ["風速", "ふうそく", "wind speed"],
+                    ["翼", "つばさ", "wing"],
+                    ["操縦", "そうじゅう", "control / piloting"],
+                    ["高度", "こうど", "altitude"],
+                    ["高度計", "こうどけい", "altimeter"],
+                    ["安全帯", "あんぜんたい", "harness / safety belt"],
+                    ["緊急着陸", "きんきゅうちゃくりく", "emergency landing"],
+                    ["飛行場", "ひこうじょう", "airfield"],
+                    ["滑走路", "かっそうろ", "runway"],
+                    ["気象", "きしょう", "weather"],
+                    ["天候", "てんこう", "weather conditions"],
+                    ["雲", "くも", "cloud"],
+                    ["積雲", "せきうん", "cumulus cloud"],
+                    ["乱気流", "らんきりゅう", "turbulence"],
+                    ["突風", "とっぷう", "gust"],
+                    ["無風", "むふう", "no wind / calm"],
+                    ["微風", "びふう", "light breeze"],
+                    ["強風", "きょうふう", "strong wind"],
+                    ["向かい風", "むかいかぜ", "headwind"],
+                    ["追い風", "おいかぜ", "tailwind"],
+                    ["横風", "よこかぜ", "crosswind"],
+                    ["地上", "ちじょう", "ground"],
+                    ["上空", "じょうくう", "sky / above"],
+                    ["旋回", "せんかい", "turn / circling"],
+                    ["急降下", "きゅうこうか", "dive / rapid descent"],
+                    ["水平飛行", "すいへいひこう", "level flight"],
+                    ["着地", "ちゃくち", "touchdown"],
+                    ["墜落", "ついらく", "crash"],
+                    ["遭難", "そうなん", "distress / accident"],
+                    ["救助", "きゅうじょ", "rescue"],
+                    ["訓練", "くんれん", "training"],
+                    ["初心者", "しょしんしゃ", "beginner"],
+                    ["経験者", "けいけんしゃ", "experienced person"],
+                    ["資格", "しかく", "qualification / license"],
+                    ["許可", "きょか", "permission"],
+                    ["禁止", "きんし", "prohibited"],
+                    ["注意", "ちゅうい", "caution"],
+                    ["危険", "きけん", "danger"],
+                    ["安全", "あんぜん", "safety"],
+                    ["点検", "てんけん", "inspection"],
+                    ["整備", "せいび", "maintenance"],
+                    ["装備", "そうび", "equipment"],
+                    ["予備", "よび", "spare / reserve"],
+                    ["出発", "しゅっぱつ", "departure"],
+                    ["到着", "とうちゃく", "arrival"]
+                ]
+            },
+            sailing: {
+                icon: "⛵",
+                name: "Sailing",
+                nameJp: "ヨット・セーリング用語",
+                words: [
+                    ["帆", "ほ", "sail"],
+                    ["舵", "かじ", "rudder / helm"],
+                    ["船首", "せんしゅ", "bow (front)"],
+                    ["船尾", "せんび", "stern (back)"],
+                    ["甲板", "かんぱん", "deck"],
+                    ["船底", "せんてい", "hull bottom"],
+                    ["錨", "いかり", "anchor"],
+                    ["港", "みなと", "harbor / port"],
+                    ["帆柱", "ほばしら", "mast"],
+                    ["索具", "さくぐ", "rigging"],
+                    ["風上", "かざかみ", "windward / upwind"],
+                    ["風下", "かざしも", "leeward / downwind"],
+                    ["追い風", "おいかぜ", "tailwind"],
+                    ["向かい風", "むかいかぜ", "headwind"],
+                    ["横風", "よこかぜ", "crosswind"],
+                    ["転覆", "てんぷく", "capsizing"],
+                    ["左舷", "さげん", "port (left side)"],
+                    ["右舷", "うげん", "starboard (right side)"],
+                    ["船長", "せんちょう", "captain"],
+                    ["乗組員", "のりくみいん", "crew"],
+                    ["航海", "こうかい", "voyage / navigation"],
+                    ["出航", "しゅっこう", "departure / sailing out"],
+                    ["入港", "にゅうこう", "entering port"],
+                    ["停泊", "ていはく", "anchoring / mooring"],
+                    ["浮標", "ふひょう", "buoy"],
+                    ["灯台", "とうだい", "lighthouse"],
+                    ["海図", "かいず", "nautical chart"],
+                    ["羅針盤", "らしんばん", "compass"],
+                    ["潮流", "ちょうりゅう", "tidal current"],
+                    ["満潮", "まんちょう", "high tide"],
+                    ["干潮", "かんちょう", "low tide"],
+                    ["波", "なみ", "wave"],
+                    ["高波", "たかなみ", "high waves"],
+                    ["凪", "なぎ", "calm sea"],
+                    ["嵐", "あらし", "storm"],
+                    ["暴風", "ぼうふう", "gale / storm wind"],
+                    ["霧", "きり", "fog"],
+                    ["視界", "しかい", "visibility"],
+                    ["海面", "かいめん", "sea surface"],
+                    ["水深", "すいしん", "water depth"],
+                    ["浅瀬", "あさせ", "shoal / shallow water"],
+                    ["岩礁", "がんしょう", "reef / rocks"],
+                    ["座礁", "ざしょう", "running aground"],
+                    ["救命胴衣", "きゅうめいどうい", "life jacket"],
+                    ["救命艇", "きゅうめいてい", "lifeboat"],
+                    ["信号旗", "しんごうき", "signal flag"],
+                    ["遭難信号", "そうなんしんごう", "distress signal"],
+                    ["曳航", "えいこう", "towing"],
+                    ["係留", "けいりゅう", "mooring"],
+                    ["桟橋", "さんばし", "pier / jetty"]
+                ]
+            },
+            kiteboarding: {
+                icon: "🪁🏄",
+                name: "Kiteboarding",
+                nameJp: "カイトボード用語",
+                words: [
+                    ["凧", "たこ", "kite"],
+                    ["板", "いた", "board"],
+                    ["波", "なみ", "wave"],
+                    ["浜", "はま", "beach"],
+                    ["風速", "ふうそく", "wind speed"],
+                    ["浮力", "ふりょく", "buoyancy"],
+                    ["跳躍", "ちょうやく", "jump"],
+                    ["着水", "ちゃくすい", "water landing"],
+                    ["救命胴衣", "きゅうめいどうい", "life jacket"],
+                    ["安全索", "あんぜんさく", "safety leash"],
+                    ["操作", "そうさ", "control / operation"],
+                    ["発進", "はっしん", "launch"],
+                    ["停止", "ていし", "stop"],
+                    ["方向転換", "ほうこうてんかん", "change direction"],
+                    ["加速", "かそく", "acceleration"],
+                    ["減速", "げんそく", "deceleration"],
+                    ["滑走", "かっそう", "gliding / sliding"],
+                    ["転倒", "てんとう", "fall / tumble"],
+                    ["回転", "かいてん", "rotation / spin"],
+                    ["上昇", "じょうしょう", "ascent / rising"],
+                    ["下降", "かこう", "descent"],
+                    ["浮上", "ふじょう", "surfacing"],
+                    ["沈没", "ちんぼつ", "sinking"],
+                    ["牽引", "けんいん", "towing / pulling"],
+                    ["張力", "ちょうりょく", "tension"],
+                    ["弛み", "たるみ", "slack"],
+                    ["海岸", "かいがん", "coast / shore"],
+                    ["沖", "おき", "offshore"],
+                    ["岸", "きし", "shore"],
+                    ["砂浜", "すなはま", "sandy beach"],
+                    ["波打ち際", "なみうちぎわ", "water's edge"],
+                    ["潮", "しお", "tide"],
+                    ["流れ", "ながれ", "current"],
+                    ["渦", "うず", "whirlpool / vortex"],
+                    ["水温", "すいおん", "water temperature"],
+                    ["日焼け", "ひやけ", "sunburn"],
+                    ["熱中症", "ねっちゅうしょう", "heatstroke"],
+                    ["脱水", "だっすい", "dehydration"],
+                    ["防水", "ぼうすい", "waterproof"],
+                    ["耐久性", "たいきゅうせい", "durability"],
+                    ["修理", "しゅうり", "repair"],
+                    ["交換", "こうかん", "replacement"],
+                    ["調整", "ちょうせい", "adjustment"],
+                    ["初級", "しょきゅう", "beginner level"],
+                    ["中級", "ちゅうきゅう", "intermediate level"],
+                    ["上級", "じょうきゅう", "advanced level"],
+                    ["講習", "こうしゅう", "lessons / course"],
+                    ["練習", "れんしゅう", "practice"],
+                    ["技術", "ぎじゅつ", "technique / skill"],
+                    ["競技", "きょうぎ", "competition"]
+                ]
+            },
+            kiteflying: {
+                icon: "🪁",
+                name: "Kite Flying",
+                nameJp: "凧揚げ用語",
+                words: [
+                    ["凧", "たこ", "kite"],
+                    ["凧揚げ", "たこあげ", "kite flying"],
+                    ["糸", "いと", "string / thread"],
+                    ["糸巻き", "いとまき", "spool / reel"],
+                    ["風", "かぜ", "wind"],
+                    ["尾", "お", "tail"],
+                    ["骨組み", "ほねぐみ", "frame / skeleton"],
+                    ["紙", "かみ", "paper"],
+                    ["布", "ぬの", "cloth / fabric"],
+                    ["揚げる", "あげる", "to fly / raise up"],
+                    ["和凧", "わだこ", "Japanese kite"],
+                    ["連凧", "れんだこ", "train kite (multiple)"],
+                    ["角凧", "かくだこ", "square kite"],
+                    ["奴凧", "やっこだこ", "yakko kite (servant)"],
+                    ["蝶凧", "ちょうだこ", "butterfly kite"],
+                    ["龍凧", "りゅうだこ", "dragon kite"],
+                    ["絵凧", "えだこ", "picture kite"],
+                    ["武者凧", "むしゃだこ", "warrior kite"],
+                    ["正月", "しょうがつ", "New Year"],
+                    ["伝統", "でんとう", "tradition"],
+                    ["祭り", "まつり", "festival"],
+                    ["大会", "たいかい", "competition / event"],
+                    ["空", "そら", "sky"],
+                    ["青空", "あおぞら", "blue sky"],
+                    ["雲", "くも", "cloud"],
+                    ["晴れ", "はれ", "clear weather"],
+                    ["曇り", "くもり", "cloudy"],
+                    ["風向き", "かざむき", "wind direction"],
+                    ["そよ風", "そよかぜ", "gentle breeze"],
+                    ["強風", "きょうふう", "strong wind"],
+                    ["無風", "むふう", "no wind"],
+                    ["上昇", "じょうしょう", "rising / ascent"],
+                    ["下降", "かこう", "descending"],
+                    ["安定", "あんてい", "stability"],
+                    ["不安定", "ふあんてい", "unstable"],
+                    ["墜落", "ついらく", "crash / fall"],
+                    ["絡まる", "からまる", "to get tangled"],
+                    ["切れる", "きれる", "to break / snap"],
+                    ["飛ぶ", "とぶ", "to fly"],
+                    ["舞う", "まう", "to dance / flutter"],
+                    ["広場", "ひろば", "open space / plaza"],
+                    ["河川敷", "かせんじき", "riverbed area"],
+                    ["公園", "こうえん", "park"],
+                    ["海岸", "かいがん", "beach / coast"],
+                    ["電線", "でんせん", "power lines"],
+                    ["木", "き", "tree"],
+                    ["障害物", "しょうがいぶつ", "obstacle"],
+                    ["手作り", "てづくり", "handmade"],
+                    ["職人", "しょくにん", "craftsman"],
+                    ["芸術", "げいじゅつ", "art"]
+                ]
+            },
+            aerodynamics: {
+                icon: "✈️",
+                name: "Aerodynamics",
+                nameJp: "空気力学用語",
+                words: [
+                    ["空気力学", "くうきりきがく", "aerodynamics"],
+                    ["揚力", "ようりょく", "lift"],
+                    ["抗力", "こうりょく", "drag"],
+                    ["推力", "すいりょく", "thrust"],
+                    ["重力", "じゅうりょく", "gravity"],
+                    ["気流", "きりゅう", "airflow / air current"],
+                    ["乱気流", "らんきりゅう", "turbulence"],
+                    ["層流", "そうりゅう", "laminar flow"],
+                    ["翼型", "よくがた", "airfoil"],
+                    ["迎角", "げいかく", "angle of attack"],
+                    ["失速", "しっそく", "stall"],
+                    ["空気抵抗", "くうきていこう", "air resistance"],
+                    ["圧力", "あつりょく", "pressure"],
+                    ["密度", "みつど", "density"],
+                    ["速度", "そくど", "velocity / speed"],
+                    ["流体力学", "りゅうたいりきがく", "fluid dynamics"],
+                    ["境界層", "きょうかいそう", "boundary layer"],
+                    ["渦", "うず", "vortex"],
+                    ["音速", "おんそく", "speed of sound"],
+                    ["超音速", "ちょうおんそく", "supersonic"],
+                    ["亜音速", "あおんそく", "subsonic"],
+                    ["遷音速", "せんおんそく", "transonic"],
+                    ["衝撃波", "しょうげきは", "shock wave"],
+                    ["圧縮性", "あっしゅくせい", "compressibility"],
+                    ["粘性", "ねんせい", "viscosity"],
+                    ["摩擦", "まさつ", "friction"],
+                    ["抵抗係数", "ていこうけいすう", "drag coefficient"],
+                    ["揚力係数", "ようりょくけいすう", "lift coefficient"],
+                    ["揚抗比", "ようこうひ", "lift-to-drag ratio"],
+                    ["風洞", "ふうどう", "wind tunnel"],
+                    ["実験", "じっけん", "experiment"],
+                    ["計測", "けいそく", "measurement"],
+                    ["解析", "かいせき", "analysis"],
+                    ["数値計算", "すうちけいさん", "numerical calculation"],
+                    ["模型", "もけい", "model"],
+                    ["縮尺", "しゅくしゃく", "scale"],
+                    ["翼面積", "よくめんせき", "wing area"],
+                    ["翼幅", "よくはば", "wingspan"],
+                    ["翼弦", "よくげん", "chord"],
+                    ["アスペクト比", "あすぺくとひ", "aspect ratio"],
+                    ["後退角", "こうたいかく", "sweep angle"],
+                    ["上反角", "じょうはんかく", "dihedral angle"],
+                    ["フラップ", "ふらっぷ", "flap"],
+                    ["エルロン", "えるろん", "aileron"],
+                    ["エレベーター", "えれべーたー", "elevator"],
+                    ["ラダー", "らだー", "rudder"],
+                    ["尾翼", "びよく", "tail wing / empennage"],
+                    ["胴体", "どうたい", "fuselage"],
+                    ["降着装置", "こうちゃくそうち", "landing gear"],
+                    ["プロペラ", "ぷろぺら", "propeller"]
+                ]
+            },
+            rf: {
+                icon: "📡",
+                name: "RF Communications",
+                nameJp: "無線通信用語",
+                words: [
+                    ["無線", "むせん", "radio / wireless"],
+                    ["周波数", "しゅうはすう", "frequency"],
+                    ["電波", "でんぱ", "radio wave"],
+                    ["送信", "そうしん", "transmission"],
+                    ["受信", "じゅしん", "reception"],
+                    ["変調", "へんちょう", "modulation"],
+                    ["復調", "ふくちょう", "demodulation"],
+                    ["帯域", "たいいき", "bandwidth"],
+                    ["出力", "しゅつりょく", "output / power"],
+                    ["感度", "かんど", "sensitivity"],
+                    ["雑音", "ざつおん", "noise"],
+                    ["干渉", "かんしょう", "interference"],
+                    ["空中線", "くうちゅうせん", "antenna"],
+                    ["送信機", "そうしんき", "transmitter"],
+                    ["受信機", "じゅしんき", "receiver"],
+                    ["増幅器", "ぞうふくき", "amplifier"],
+                    ["発振器", "はっしんき", "oscillator"],
+                    ["短波", "たんぱ", "shortwave (HF)"],
+                    ["超短波", "ちょうたんぱ", "VHF"],
+                    ["極超短波", "ごくちょうたんぱ", "UHF"],
+                    ["マイクロ波", "まいくろは", "microwave"],
+                    ["電離層", "でんりそう", "ionosphere"],
+                    ["反射", "はんしゃ", "reflection"],
+                    ["屈折", "くっせつ", "refraction"],
+                    ["伝搬", "でんぱん", "propagation"],
+                    ["減衰", "げんすい", "attenuation"],
+                    ["利得", "りとく", "gain"],
+                    ["指向性", "しこうせい", "directivity"],
+                    ["偏波", "へんぱ", "polarization"],
+                    ["同軸ケーブル", "どうじくけーぶる", "coaxial cable"],
+                    ["給電線", "きゅうでんせん", "feed line"],
+                    ["整合", "せいごう", "matching"],
+                    ["定在波", "ていざいは", "standing wave"],
+                    ["電力", "でんりょく", "electric power"],
+                    ["電圧", "でんあつ", "voltage"],
+                    ["電流", "でんりゅう", "current"],
+                    ["抵抗", "ていこう", "resistance"],
+                    ["容量", "ようりょう", "capacitance"],
+                    ["誘導", "ゆうどう", "inductance"],
+                    ["共振", "きょうしん", "resonance"],
+                    ["濾波器", "ろはき", "filter"],
+                    ["混合器", "こんごうき", "mixer"],
+                    ["検波器", "けんぱき", "detector"],
+                    ["免許", "めんきょ", "license"],
+                    ["呼出符号", "よびだしふごう", "call sign"],
+                    ["交信", "こうしん", "communication"],
+                    ["通話", "つうわ", "conversation"],
+                    ["傍受", "ぼうじゅ", "interception"],
+                    ["暗号", "あんごう", "cipher / code"],
+                    ["復号", "ふくごう", "decryption"]
+                ]
+            },
+            sdr: {
+                icon: "📻",
+                name: "SDR",
+                nameJp: "ソフトウェア無線用語",
+                words: [
+                    ["軟件無線", "なんけんむせん", "software defined radio"],
+                    ["標本化", "ひょうほんか", "sampling"],
+                    ["量子化", "りょうしか", "quantization"],
+                    ["復号", "ふくごう", "decoding"],
+                    ["符号化", "ふごうか", "encoding"],
+                    ["信号処理", "しんごうしょり", "signal processing"],
+                    ["波形", "はけい", "waveform"],
+                    ["位相", "いそう", "phase"],
+                    ["振幅", "しんぷく", "amplitude"],
+                    ["濾波器", "ろはき", "filter"],
+                    ["畳み込み", "たたみこみ", "convolution"],
+                    ["相関", "そうかん", "correlation"],
+                    ["変換", "へんかん", "transform"],
+                    ["周波数領域", "しゅうはすうりょういき", "frequency domain"],
+                    ["時間領域", "じかんりょういき", "time domain"],
+                    ["帯域幅", "たいいきはば", "bandwidth"],
+                    ["中心周波数", "ちゅうしんしゅうはすう", "center frequency"],
+                    ["標本化率", "ひょうほんかりつ", "sampling rate"],
+                    ["量子化誤差", "りょうしかごさ", "quantization error"],
+                    ["動的範囲", "どうてきはんい", "dynamic range"],
+                    ["信号対雑音比", "しんごうたいざつおんひ", "signal-to-noise ratio"],
+                    ["混信", "こんしん", "interference"],
+                    ["選択度", "せんたくど", "selectivity"],
+                    ["感度", "かんど", "sensitivity"],
+                    ["直交", "ちょっこう", "quadrature"],
+                    ["複素数", "ふくそすう", "complex number"],
+                    ["実数部", "じっすうぶ", "real part"],
+                    ["虚数部", "きょすうぶ", "imaginary part"],
+                    ["振幅変調", "しんぷくへんちょう", "amplitude modulation (AM)"],
+                    ["周波数変調", "しゅうはすうへんちょう", "frequency modulation (FM)"],
+                    ["位相変調", "いそうへんちょう", "phase modulation (PM)"],
+                    ["直交振幅変調", "ちょっこうしんぷくへんちょう", "QAM"],
+                    ["復調", "ふくちょう", "demodulation"],
+                    ["同期", "どうき", "synchronization"],
+                    ["搬送波", "はんそうは", "carrier wave"],
+                    ["側帯波", "そくたいは", "sideband"],
+                    ["雑音指数", "ざつおんしすう", "noise figure"],
+                    ["利得", "りとく", "gain"],
+                    ["増幅", "ぞうふく", "amplification"],
+                    ["混合", "こんごう", "mixing"],
+                    ["局部発振器", "きょくぶはっしんき", "local oscillator"],
+                    ["中間周波数", "ちゅうかんしゅうはすう", "intermediate frequency (IF)"],
+                    ["基底帯域", "きていたいいき", "baseband"],
+                    ["受信感度", "じゅしんかんど", "receiver sensitivity"],
+                    ["飽和", "ほうわ", "saturation"],
+                    ["歪み", "ひずみ", "distortion"],
+                    ["線形性", "せんけいせい", "linearity"],
+                    ["実時間", "じつじかん", "real-time"],
+                    ["緩衝記憶", "かんしょうきおく", "buffer"],
+                    ["演算", "えんざん", "computation"]
+                ]
+            },
+            chemistry: {
+                icon: "⚗️",
+                name: "Chemistry",
+                nameJp: "元素・分子用語",
+                words: [
+                    ["水素", "すいそ", "hydrogen (H)"],
+                    ["酸素", "さんそ", "oxygen (O)"],
+                    ["窒素", "ちっそ", "nitrogen (N)"],
+                    ["炭素", "たんそ", "carbon (C)"],
+                    ["鉄", "てつ", "iron (Fe)"],
+                    ["銅", "どう", "copper (Cu)"],
+                    ["金", "きん", "gold (Au)"],
+                    ["銀", "ぎん", "silver (Ag)"],
+                    ["塩素", "えんそ", "chlorine (Cl)"],
+                    ["硫黄", "いおう", "sulfur (S)"],
+                    ["燐", "りん", "phosphorus (P)"],
+                    ["珪素", "けいそ", "silicon (Si)"],
+                    ["亜鉛", "あえん", "zinc (Zn)"],
+                    ["鉛", "なまり", "lead (Pb)"],
+                    ["錫", "すず", "tin (Sn)"],
+                    ["水銀", "すいぎん", "mercury (Hg)"],
+                    ["白金", "はっきん", "platinum (Pt)"],
+                    ["ヘリウム", "へりうむ", "helium (He)"],
+                    ["ネオン", "ねおん", "neon (Ne)"],
+                    ["アルゴン", "あるごん", "argon (Ar)"],
+                    ["ナトリウム", "なとりうむ", "sodium (Na)"],
+                    ["カリウム", "かりうむ", "potassium (K)"],
+                    ["カルシウム", "かるしうむ", "calcium (Ca)"],
+                    ["マグネシウム", "まぐねしうむ", "magnesium (Mg)"],
+                    ["アルミニウム", "あるみにうむ", "aluminum (Al)"],
+                    ["水", "みず", "water (H₂O)"],
+                    ["二酸化炭素", "にさんかたんそ", "carbon dioxide (CO₂)"],
+                    ["一酸化炭素", "いっさんかたんそ", "carbon monoxide (CO)"],
+                    ["塩化ナトリウム", "えんかなとりうむ", "sodium chloride (NaCl)"],
+                    ["アンモニア", "あんもにあ", "ammonia (NH₃)"],
+                    ["硫酸", "りゅうさん", "sulfuric acid (H₂SO₄)"],
+                    ["塩酸", "えんさん", "hydrochloric acid (HCl)"],
+                    ["硝酸", "しょうさん", "nitric acid (HNO₃)"],
+                    ["元素", "げんそ", "element"],
+                    ["分子", "ぶんし", "molecule"],
+                    ["原子", "げんし", "atom"],
+                    ["化合物", "かごうぶつ", "compound"],
+                    ["反応", "はんのう", "reaction"],
+                    ["溶液", "ようえき", "solution"],
+                    ["溶媒", "ようばい", "solvent"],
+                    ["溶質", "ようしつ", "solute"],
+                    ["濃度", "のうど", "concentration"],
+                    ["酸", "さん", "acid"],
+                    ["塩基", "えんき", "base / alkali"],
+                    ["中和", "ちゅうわ", "neutralization"],
+                    ["酸化", "さんか", "oxidation"],
+                    ["還元", "かんげん", "reduction"],
+                    ["触媒", "しょくばい", "catalyst"],
+                    ["結晶", "けっしょう", "crystal"],
+                    ["周期表", "しゅうきひょう", "periodic table"]
+                ]
+            },
+            school: {
+                icon: "🏫",
+                name: "School",
+                nameJp: "学校用語",
+                words: [
+                    ["小学校", "しょうがっこう", "elementary school"],
+                    ["中学校", "ちゅうがっこう", "junior high school"],
+                    ["高等学校", "こうとうがっこう", "high school"],
+                    ["大学", "だいがく", "university"],
+                    ["幼稚園", "ようちえん", "kindergarten"],
+                    ["国語", "こくご", "Japanese (language)"],
+                    ["算数", "さんすう", "arithmetic"],
+                    ["数学", "すうがく", "mathematics"],
+                    ["理科", "りか", "science"],
+                    ["社会", "しゃかい", "social studies"],
+                    ["英語", "えいご", "English"],
+                    ["体育", "たいいく", "physical education"],
+                    ["音楽", "おんがく", "music"],
+                    ["美術", "びじゅつ", "art"],
+                    ["歴史", "れきし", "history"],
+                    ["地理", "ちり", "geography"],
+                    ["物理", "ぶつり", "physics"],
+                    ["化学", "かがく", "chemistry"],
+                    ["生物", "せいぶつ", "biology"],
+                    ["家庭科", "かていか", "home economics"],
+                    ["教室", "きょうしつ", "classroom"],
+                    ["先生", "せんせい", "teacher"],
+                    ["生徒", "せいと", "student"],
+                    ["学生", "がくせい", "student (university)"],
+                    ["宿題", "しゅくだい", "homework"],
+                    ["試験", "しけん", "exam"],
+                    ["成績", "せいせき", "grades"],
+                    ["卒業", "そつぎょう", "graduation"],
+                    ["入学", "にゅうがく", "enrollment"],
+                    ["授業", "じゅぎょう", "class / lesson"],
+                    ["時間割", "じかんわり", "schedule / timetable"],
+                    ["教科書", "きょうかしょ", "textbook"],
+                    ["ノート", "のーと", "notebook"],
+                    ["鉛筆", "えんぴつ", "pencil"],
+                    ["消しゴム", "けしごむ", "eraser"],
+                    ["定規", "じょうぎ", "ruler"],
+                    ["黒板", "こくばん", "blackboard"],
+                    ["白板", "はくばん", "whiteboard"],
+                    ["校長", "こうちょう", "principal"],
+                    ["担任", "たんにん", "homeroom teacher"],
+                    ["部活", "ぶかつ", "club activities"],
+                    ["運動会", "うんどうかい", "sports day"],
+                    ["文化祭", "ぶんかさい", "school festival"],
+                    ["修学旅行", "しゅうがくりょこう", "school trip"],
+                    ["図書館", "としょかん", "library"],
+                    ["体育館", "たいいくかん", "gymnasium"],
+                    ["校庭", "こうてい", "schoolyard"],
+                    ["出席", "しゅっせき", "attendance"],
+                    ["欠席", "けっせき", "absence"],
+                    ["遅刻", "ちこく", "late arrival"]
+                ]
+            },
+            fish: {
+                icon: "🐟",
+                name: "Fish & Seafood",
+                nameJp: "魚介類用語",
+                words: [
+                    ["鮪", "まぐろ", "tuna"],
+                    ["鮭", "さけ", "salmon"],
+                    ["鯛", "たい", "sea bream"],
+                    ["鯖", "さば", "mackerel"],
+                    ["鰹", "かつお", "bonito"],
+                    ["鰯", "いわし", "sardine"],
+                    ["鰻", "うなぎ", "eel"],
+                    ["鮎", "あゆ", "sweetfish"],
+                    ["鯉", "こい", "carp"],
+                    ["鱈", "たら", "cod"],
+                    ["鰤", "ぶり", "yellowtail"],
+                    ["鯵", "あじ", "horse mackerel"],
+                    ["鮃", "ひらめ", "flounder"],
+                    ["鰈", "かれい", "flatfish"],
+                    ["鱸", "すずき", "sea bass"],
+                    ["鮒", "ふな", "crucian carp"],
+                    ["鯰", "なまず", "catfish"],
+                    ["鱧", "はも", "pike conger"],
+                    ["鰆", "さわら", "Spanish mackerel"],
+                    ["鯱", "しゃち", "orca / killer whale"],
+                    ["鯨", "くじら", "whale"],
+                    ["海豚", "いるか", "dolphin"],
+                    ["鮫", "さめ", "shark"],
+                    ["蟹", "かに", "crab"],
+                    ["海老", "えび", "shrimp"],
+                    ["烏賊", "いか", "squid"],
+                    ["蛸", "たこ", "octopus"],
+                    ["貝", "かい", "shellfish"],
+                    ["牡蠣", "かき", "oyster"],
+                    ["帆立", "ほたて", "scallop"],
+                    ["海胆", "うに", "sea urchin"],
+                    ["鮑", "あわび", "abalone"],
+                    ["蛤", "はまぐり", "clam"],
+                    ["浅蜊", "あさり", "short-neck clam"],
+                    ["蜆", "しじみ", "freshwater clam"],
+                    ["栄螺", "さざえ", "turban shell"],
+                    ["海鼠", "なまこ", "sea cucumber"],
+                    ["海月", "くらげ", "jellyfish"],
+                    ["魚", "さかな", "fish"],
+                    ["刺身", "さしみ", "sashimi"],
+                    ["寿司", "すし", "sushi"],
+                    ["鮮魚", "せんぎょ", "fresh fish"],
+                    ["養殖", "ようしょく", "aquaculture"],
+                    ["漁業", "ぎょぎょう", "fishing industry"],
+                    ["漁師", "りょうし", "fisherman"],
+                    ["漁船", "ぎょせん", "fishing boat"],
+                    ["魚市場", "うおいちば", "fish market"],
+                    ["鮮度", "せんど", "freshness"],
+                    ["旬", "しゅん", "in season"],
+                    ["活魚", "かつぎょ", "live fish"]
+                ]
+            }
+        };
+
+        // Initialize app
+        function init() {
+            renderTabs();
+            updateTotalCount();
+            
+            // Activate first tab
+            const firstTab = Object.keys(glossaryData)[0];
+            activateTab(firstTab);
+        }
+
+        function renderTabs() {
+            const header = document.getElementById('tabsHeader');
+            const content = document.getElementById('tabsContent');
+            
+            let headerHtml = '';
+            let contentHtml = '';
+            
+            Object.entries(glossaryData).forEach(([key, topic]) => {
+                headerHtml += `
+                    <button class="tab-btn" data-tab="${key}" onclick="activateTab('${key}')">
+                        <span class="tab-icon">${topic.icon}</span>
+                        <span class="tab-name">${topic.name}</span>
+                    </button>
+                `;
+                
+                contentHtml += `
+                    <div class="tab-content" id="tab-${key}">
+                        <h2 class="tab-title">${topic.icon} ${topic.name}</h2>
+                        <p class="tab-subtitle">${topic.nameJp} • ${topic.words.length} words</p>
+                        
+                        <div class="search-box">
+                            <input type="text" class="search-input" 
+                                   placeholder="🔍 Search (kanji, hiragana, or English)..."
+                                   onkeyup="filterTable('${key}', this.value)">
+                        </div>
+                        
+                        <table class="glossary-table" id="table-${key}">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('${key}', 0)">漢字 <span class="sort-icon">↕</span></th>
+                                    <th onclick="sortTable('${key}', 1)">ひらがな <span class="sort-icon">↕</span></th>
+                                    <th onclick="sortTable('${key}', 2)">English <span class="sort-icon">↕</span></th>
+                                    <th>🔗</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${topic.words.map(([kanji, hiragana, english]) => `
+                                    <tr>
+                                        <td class="kanji">${kanji}</td>
+                                        <td class="hiragana">${hiragana}</td>
+                                        <td class="english">${english}</td>
+                                        <td><a href="https://jisho.org/search/${encodeURIComponent(kanji)}" target="_blank" class="dict-link" title="Look up on Jisho.org">📖</a></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <div class="no-results" style="display: none;">No matching words found</div>
+                    </div>
+                `;
+            });
+            
+            header.innerHTML = headerHtml;
+            content.innerHTML = contentHtml;
+        }
+
+        function activateTab(tabKey) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabKey);
+            });
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `tab-${tabKey}`);
+            });
+        }
+
+        function updateTotalCount() {
+            let total = 0;
+            Object.values(glossaryData).forEach(topic => {
+                total += topic.words.length;
+            });
+            document.getElementById('totalCount').textContent = `${total} words across ${Object.keys(glossaryData).length} topics`;
+        }
+
+        // Sorting
+        const sortState = {};
+
+        function sortTable(tabKey, columnIndex) {
+            const table = document.getElementById(`table-${tabKey}`);
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const headers = table.querySelectorAll('th');
+            
+            // Toggle sort direction
+            const currentDir = sortState[`${tabKey}-${columnIndex}`] || 'asc';
+            const newDir = currentDir === 'asc' ? 'desc' : 'asc';
+            sortState[`${tabKey}-${columnIndex}`] = newDir;
+            
+            // Update header classes
+            headers.forEach((th, i) => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (i === columnIndex) {
+                    th.classList.add(newDir === 'asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex].textContent.trim();
+                const bVal = b.cells[columnIndex].textContent.trim();
+                
+                const comparison = aVal.localeCompare(bVal, 'ja');
+                return newDir === 'asc' ? comparison : -comparison;
+            });
+            
+            // Re-append rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        // Filtering
+        function filterTable(tabKey, query) {
+            const table = document.getElementById(`table-${tabKey}`);
+            const rows = table.querySelectorAll('tbody tr');
+            const noResults = document.querySelector(`#tab-${tabKey} .no-results`);
+            const lowerQuery = query.toLowerCase().trim();
+            
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const kanji = row.cells[0].textContent;
+                const hiragana = row.cells[1].textContent;
+                const english = row.cells[2].textContent.toLowerCase();
+                
+                const matches = kanji.includes(query) || 
+                               hiragana.includes(query) || 
+                               english.includes(lowerQuery);
+                
+                row.classList.toggle('hidden', !matches);
+                if (matches) visibleCount++;
+            });
+            
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
