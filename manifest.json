@@ -4,8 +4,8 @@
   "description": "Japanese terminology glossary for technical topics",
   "start_url": "/nihongo-glossary/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#1a1a2e",
+  "background_color": "#2d1f1a",
+  "theme_color": "#2d1f1a",
   "icons": [
     {
       "src": "icon-192.png",

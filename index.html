@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-    <meta name="theme-color" content="#1a1a2e">
+    <meta name="theme-color" content="#2d1f1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="日本語用語集">
@@ -23,9 +23,9 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1a1512 0%, #2d1f1a 50%, #3d2a1f 100%);
             min-height: 100vh;
-            color: #e0e0e0;
+            color: #e8dcd0;
             padding: 20px;
         }
         
@@ -42,20 +42,14 @@
         
         h1 {
             font-size: 2.5rem;
-            color: #00d9ff;
+            color: #ff9f43;
             margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            text-shadow: 0 0 20px rgba(255, 159, 67, 0.3);
         }
         
         .subtitle {
-            color: #888;
+            color: #a89080;
             font-size: 1.1rem;
-        }
-
-        .word-count {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 10px;
         }
 
         /* Tabs */
@@ -98,9 +92,9 @@
         }
 
         .tab-btn.active {
-            color: #00d9ff;
-            border-color: #00d9ff;
-            background: rgba(0, 217, 255, 0.15);
+            color: #ff9f43;
+            border-color: #ff9f43;
+            background: rgba(255, 159, 67, 0.15);
         }
 
         .tab-icon {
@@ -124,12 +118,12 @@
         }
 
         .tab-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 217, 255, 0.3);
+            background: rgba(255, 159, 67, 0.3);
             border-radius: 4px;
         }
 
         .tab-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 217, 255, 0.5);
+            background: rgba(255, 159, 67, 0.5);
         }
 
         .tab-content.active {
@@ -170,8 +164,8 @@
         }
 
         .search-input:focus {
-            border-color: rgba(0, 217, 255, 0.5);
-            box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
+            border-color: rgba(255, 159, 67, 0.5);
+            box-shadow: 0 0 15px rgba(255, 159, 67, 0.1);
         }
 
         /* Table */
@@ -181,20 +175,20 @@
         }
 
         .glossary-table th {
-            background: rgba(0, 217, 255, 0.1);
+            background: rgba(255, 159, 67, 0.1);
             padding: 12px 16px;
             text-align: left;
             font-weight: 600;
-            color: #00d9ff;
+            color: #ff9f43;
             cursor: pointer;
             user-select: none;
-            border-bottom: 2px solid rgba(0, 217, 255, 0.3);
+            border-bottom: 2px solid rgba(255, 159, 67, 0.3);
             transition: background 0.2s ease;
             white-space: nowrap;
         }
 
         .glossary-table th:hover {
-            background: rgba(0, 217, 255, 0.2);
+            background: rgba(255, 159, 67, 0.2);
         }
 
         .glossary-table th .sort-icon {
@@ -231,11 +225,11 @@
             color: #fff;
             text-decoration: none;
             transition: all 0.2s ease;
-            border-bottom: 1px solid #00d9ff;
+            border-bottom: 1px solid #ff9f43;
         }
 
         .kanji a:hover {
-            color: #00d9ff;
+            color: #ff9f43;
         }
 
         .hiragana {
@@ -275,7 +269,7 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #00d9ff;
+            color: #ff9f43;
         }
 
         .stat-label {
@@ -293,7 +287,7 @@
         }
         
         footer a {
-            color: #00d9ff;
+            color: #ff9f43;
             text-decoration: none;
         }
 
@@ -339,15 +333,15 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 8px 14px;
-            color: #00d9ff;
+            color: #ff9f43;
             text-decoration: none;
             font-size: 0.85rem;
             transition: all 0.3s ease;
         }
 
         .quick-link:hover {
-            background: rgba(0, 217, 255, 0.15);
-            border-color: rgba(0, 217, 255, 0.3);
+            background: rgba(255, 159, 67, 0.15);
+            border-color: rgba(255, 159, 67, 0.3);
             transform: translateY(-2px);
         }
 
@@ -365,17 +359,17 @@
         }
 
         .toggle-btn.active {
-            background: rgba(0, 150, 110, 0.3);
-            border-color: rgba(0, 200, 150, 0.5);
+            background: rgba(238, 90, 36, 0.3);
+            border-color: rgba(238, 90, 36, 0.5);
         }
 
         .toggle-btn.active .toggle-indicator {
-            background: rgba(0, 200, 150, 0.4);
+            background: rgba(238, 90, 36, 0.4);
             color: #fff;
         }
 
         .bulgarian {
-            color: #7dd3a8;
+            color: #feca57;
         }
 
         .bg-column {
@@ -397,9 +391,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>🇯🇵 日本語用語集</h1>
+            <h1>📙 日本語用語集</h1>
             <p class="subtitle">Nihongo Glossary - Japanese Terminology</p>
-            <p class="word-count" id="totalCount">Loading...</p>
         </header>
 
         <div class="quick-links">
@@ -539,6 +532,63 @@
                     ["練習", "れんしゅう", "practice", "практика"],
                     ["技術", "ぎじゅつ", "technique / skill", "техника"],
                     ["競技", "きょうぎ", "competition", "състезание"]
+                ]
+            },
+            meteo: {
+                icon: "🌤️",
+                name: "Meteorology",
+                nameJp: "気象用語",
+                words: [
+                    ["天気", "てんき", "weather", "време"],
+                    ["気象", "きしょう", "meteorology", "метеорология"],
+                    ["気温", "きおん", "temperature", "температура"],
+                    ["湿度", "しつど", "humidity", "влажност"],
+                    ["気圧", "きあつ", "atmospheric pressure", "атмосферно налягане"],
+                    ["高気圧", "こうきあつ", "high pressure", "високо налягане"],
+                    ["低気圧", "ていきあつ", "low pressure", "ниско налягане"],
+                    ["前線", "ぜんせん", "weather front", "атмосферен фронт"],
+                    ["寒冷前線", "かんれいぜんせん", "cold front", "студен фронт"],
+                    ["温暖前線", "おんだんぜんせん", "warm front", "топъл фронт"],
+                    ["晴れ", "はれ", "clear/sunny", "ясно"],
+                    ["曇り", "くもり", "cloudy", "облачно"],
+                    ["雨", "あめ", "rain", "дъжд"],
+                    ["雪", "ゆき", "snow", "сняг"],
+                    ["霧", "きり", "fog", "мъгла"],
+                    ["霞", "かすみ", "haze", "мараня"],
+                    ["雷", "かみなり", "thunder", "гръм"],
+                    ["稲妻", "いなずま", "lightning", "светкавица"],
+                    ["雹", "ひょう", "hail", "градушка"],
+                    ["霜", "しも", "frost", "скреж"],
+                    ["露", "つゆ", "dew", "роса"],
+                    ["虹", "にじ", "rainbow", "дъга"],
+                    ["風", "かぜ", "wind", "вятър"],
+                    ["風速", "ふうそく", "wind speed", "скорост на вятъра"],
+                    ["風向", "ふうこう", "wind direction", "посока на вятъра"],
+                    ["突風", "とっぷう", "gust", "порив"],
+                    ["微風", "びふう", "light breeze", "лек бриз"],
+                    ["強風", "きょうふう", "strong wind", "силен вятър"],
+                    ["暴風", "ぼうふう", "gale/storm", "буря"],
+                    ["台風", "たいふう", "typhoon", "тайфун"],
+                    ["竜巻", "たつまき", "tornado", "торнадо"],
+                    ["雲", "くも", "cloud", "облак"],
+                    ["積雲", "せきうん", "cumulus", "купест облак"],
+                    ["層雲", "そううん", "stratus", "слоест облак"],
+                    ["巻雲", "けんうん", "cirrus", "перест облак"],
+                    ["入道雲", "にゅうどうぐも", "cumulonimbus", "купесто-дъждовен облак"],
+                    ["降水量", "こうすいりょう", "precipitation", "валежи"],
+                    ["積雪", "せきせつ", "snow accumulation", "натрупан сняг"],
+                    ["視界", "しかい", "visibility", "видимост"],
+                    ["日照", "にっしょう", "sunshine", "слънчево греене"],
+                    ["紫外線", "しがいせん", "UV rays", "ултравиолетови лъчи"],
+                    ["熱波", "ねっぱ", "heat wave", "гореща вълна"],
+                    ["寒波", "かんぱ", "cold wave", "студена вълна"],
+                    ["乾燥", "かんそう", "dry/arid", "сухо"],
+                    ["蒸し暑い", "むしあつい", "humid/muggy", "задушно"],
+                    ["肌寒い", "はださむい", "chilly", "хладно"],
+                    ["梅雨", "つゆ", "rainy season", "дъждовен сезон"],
+                    ["天気予報", "てんきよほう", "weather forecast", "прогноза за времето"],
+                    ["警報", "けいほう", "warning", "предупреждение"],
+                    ["注意報", "ちゅういほう", "advisory", "съобщение за внимание"]
                 ]
             },
             sailing: {
@@ -1019,7 +1069,6 @@
         // Initialize app
         function init() {
             renderTabs();
-            updateTotalCount();
             
             // Restore Bulgarian preference
             const savedPref = localStorage.getItem('showBulgarian');
@@ -1097,14 +1146,6 @@
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.toggle('active', content.id === `tab-${tabKey}`);
             });
-        }
-
-        function updateTotalCount() {
-            let total = 0;
-            Object.values(glossaryData).forEach(topic => {
-                total += topic.words.length;
-            });
-            document.getElementById('totalCount').textContent = `${total} words across ${Object.keys(glossaryData).length} topics`;
         }
 
         // Sorting
