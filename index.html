@@ -59,49 +59,38 @@
 
         .tabs-header {
             display: flex;
-            overflow-x: auto;
+            flex-wrap: wrap;
             background: rgba(0, 0, 0, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .tabs-header::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .tabs-header::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .tabs-header::-webkit-scrollbar-thumb {
-            background: rgba(0, 217, 255, 0.3);
-            border-radius: 2px;
+            padding: 8px;
+            gap: 6px;
         }
 
         .tab-btn {
-            padding: 14px 20px;
-            background: none;
-            border: none;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             color: #888;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s ease;
-            border-bottom: 2px solid transparent;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .tab-btn:hover {
             color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .tab-btn.active {
             color: #00d9ff;
-            border-bottom-color: #00d9ff;
-            background: rgba(0, 217, 255, 0.1);
+            border-color: #00d9ff;
+            background: rgba(0, 217, 255, 0.15);
         }
 
         .tab-icon {
@@ -111,6 +100,26 @@
         .tab-content {
             display: none;
             padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .tab-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .tab-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .tab-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .tab-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 217, 255, 0.5);
         }
 
         .tab-content.active {
@@ -206,7 +215,18 @@
         .kanji {
             font-size: 1.3rem;
             font-weight: 500;
+        }
+
+        .kanji a {
             color: #fff;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .kanji a:hover {
+            color: #00d9ff;
+            border-bottom-color: #00d9ff;
         }
 
         .hiragana {
@@ -216,25 +236,6 @@
 
         .english {
             color: #ccc;
-        }
-
-        .dict-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            background: rgba(0, 217, 255, 0.1);
-            border-radius: 8px;
-            color: #00d9ff;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-        }
-
-        .dict-link:hover {
-            background: rgba(0, 217, 255, 0.3);
-            transform: translateY(-2px);
         }
 
         /* Section dividers */
@@ -369,7 +370,7 @@
         </div>
 
         <footer>
-            <p>Click column headers to sort • Dictionary links go to <a href="https://jisho.org" target="_blank">Jisho.org</a></p>
+            <p>Click column headers to sort • Click any word to look up on <a href="https://jisho.org" target="_blank">Jisho.org</a></p>
             <p style="margin-top: 10px;">⚡ Built by SierraVictor</p>
         </footer>
     </div>
@@ -991,16 +992,14 @@
                                     <th onclick="sortTable('${key}', 0)">漢字 <span class="sort-icon">↕</span></th>
                                     <th onclick="sortTable('${key}', 1)">ひらがな <span class="sort-icon">↕</span></th>
                                     <th onclick="sortTable('${key}', 2)">English <span class="sort-icon">↕</span></th>
-                                    <th>🔗</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 ${topic.words.map(([kanji, hiragana, english]) => `
                                     <tr>
-                                        <td class="kanji">${kanji}</td>
+                                        <td class="kanji"><a href="https://jisho.org/search/${encodeURIComponent(kanji)}" target="_blank" title="Look up on Jisho.org">${kanji}</a></td>
                                         <td class="hiragana">${hiragana}</td>
                                         <td class="english">${english}</td>
-                                        <td><a href="https://jisho.org/search/${encodeURIComponent(kanji)}" target="_blank" class="dict-link" title="Look up on Jisho.org">📖</a></td>
                                     </tr>
                                 `).join('')}
                             </tbody>
